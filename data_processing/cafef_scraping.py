@@ -6,6 +6,16 @@ pd.set_option('display.max_columns', None)
 
 #%% CLASS
 class FinanceStat:
+    """The model scapes cafef.vn to get 3 finanicial statement about a company.
+    Params:
+        company_name: name on stock market
+    
+    Function:
+        self.get_findata(report_type):
+            get finance data according to the report
+        self.export_findata(form='csv'):
+            export data to csv or xlsx format
+    """
     
     # input
     def __init__(self, company_name='fpt'):
@@ -50,13 +60,17 @@ class FinanceStat:
             # check if data available or not
             if result[year].isna().sum() == len(result):
                 result.drop(columns=year, inplace=True)
-
+        
         return result
     
     def get_findata(self, report_type):
-        return pd.concat([self.get_category(report_type),
+        """report_type in ['cashflow', 'incsta', 'bsheet']
+        """
+        result = pd.concat([self.get_category(report_type),
                           self.get_stat(report_type)],
                          axis='columns')
+        result.set_index('0', inplace=True)
+        return result.T
     
     def export_findata(self, form = 'csv'):
         # export all report data
