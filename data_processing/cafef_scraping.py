@@ -69,7 +69,7 @@ class FinanceStat:
         result = pd.concat([self.get_category(report_type),
                           self.get_stat(report_type)],
                          axis='columns')
-        result.set_index('0', inplace=True)
+        result.set_index(0, inplace=True)
         return result.T
     
     def export_findata(self, form = 'csv'):
