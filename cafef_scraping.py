@@ -63,23 +63,30 @@ class FinanceStat:
         
         return result
     
-    def get_findata(self, report_type):
-        """report_type in ['cashflow', 'incsta', 'bsheet']
+    def get_findata(self, report_type, report_format='analysis'):
+        """
+        Parameter:
+            report_type: ['cashflow', 'incsta', 'bsheet']
+            report_format: 'analysis', 'traditional'
         """
         result = pd.concat([self.get_category(report_type),
                           self.get_stat(report_type)],
                          axis='columns')
         result.set_index(0, inplace=True)
-        return result.T
+        
+        if report_format == 'analysis':
+            return result.T
+        else:
+            return result
     
-    def export_findata(self, form = 'csv'):
+    def export_findata(self, form='csv', report_format='analysis'):
         # export all report data
         for report_type in ['cashflow', 'incsta', 'bsheet']:
             file_name = self.company_name + '_' + report_type
             if form == 'csv':
-                self.get_findata(report_type).to_csv(file_name + '.csv')
+                self.get_findata(report_type, report_format).to_csv(file_name + '.csv')
             else:
-                self.get_findata(report_type).to_excel(file_name + '.xlsx')
+                self.get_findata(report_type, report_format).to_excel(file_name + '.xlsx')
         
 #%% TEST_SITE
 # model = FinanceStat()
