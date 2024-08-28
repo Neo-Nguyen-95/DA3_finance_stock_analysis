@@ -1,1 +1,0 @@
-from .cafef_scraping import FinanceStat
