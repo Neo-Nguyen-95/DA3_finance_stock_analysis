@@ -15,7 +15,8 @@ symbol = 'FPT.VN'
 
 stock_data = yf.download(
     symbol,
-    start='2024-01-01',
-    end='2024-08-01')
+    # start='2024-01-01',
+    # end='2024-08-01'
+    )
 
 print(stock_data)

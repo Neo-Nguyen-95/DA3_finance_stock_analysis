@@ -80,7 +80,11 @@ class FinanceStat:
             return result
     
     def export_findata(self, form='csv', report_format='analysis'):
-        # export all report data
+        """
+        Parameters:
+            form: ['csv', 'xlsx']
+            report_format: ['analysis', 'traditional']
+        """
         for report_type in ['cashflow', 'incsta', 'bsheet']:
             file_name = self.company_name + '_' + report_type
             if form == 'csv':
