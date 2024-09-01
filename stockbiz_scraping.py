@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 
 #%% URL SET-UP
 # URL information
-company_name = 'FPT'
+company_name = 'SSI'
 url = 'https://stockbiz.vn/ma-chung-khoan/' + company_name
 
 #%% LOGIN
@@ -63,6 +63,19 @@ def get_income_data():
     
     content_stat = content_stat.replace(',', '')
     content_stat = content_stat.splitlines()
+    try:
+        content_stat.remove('I. DOANH THU HOẠT ĐỘNG')
+        content_stat.remove('II. CHI PHÍ HOẠT ĐỘNG')
+        content_stat.remove('III. DOANH THU HOẠT ĐỘNG TÀI CHÍNH')
+        content_stat.remove('IV. CHI PHÍ TÀI CHÍNH')
+        
+        content_stat.remove('VIII. THU NHẬP KHÁC VÀ CHI PHÍ KHÁC')
+        content_stat.remove('XIII. THU NHẬP THUẦN TRÊN CỔ PHIẾU PHỔ THÔNG')
+        content_stat.remove('13.1. Lãi cơ bản trên cổ phiếu (Đồng/1 cổ phiếu)')
+        content_stat.remove('13.2. Thu nhập pha loãng trên cổ phiếu (Đồng/1 cổ phiếu)')
+    except:
+        pass
+    
     item = []
     stat = []
     
@@ -73,7 +86,7 @@ def get_income_data():
             stat.append(content_stat[i])
     
     df = pd.DataFrame(stat, index=item)
-    df = df[0].str.split(expand=True).astype(int)
+    df = df[0].str.split(expand=True)
     df.columns = year_list
     
     return df
@@ -117,8 +130,14 @@ def get_bsheet_data():
     
     content_stat = content_stat.replace(',', '')
     content_stat = content_stat.splitlines()
-    content_stat.remove('TÀI SẢN')
-    content_stat.remove('NGUỒN VỐN')  
+    try:
+        content_stat.remove('TÀI SẢN')
+        # content_stat.remove('NGUỒN VỐN')
+        content_stat.remove('LỢI NHUẬN ĐÃ PHÂN PHỐI CHO NHÀ ĐẦU TƯ')
+        content_stat.remove('1. Lợi nhuận đã phân phối cho Nhà đầu tư trong năm')
+        
+    except:
+        pass
     
     item = []
     stat = []
@@ -130,11 +149,7 @@ def get_bsheet_data():
             stat.append(content_stat[i])
     
     df = pd.DataFrame(stat, index=item)
-    df = df[0].str.split(expand=True).astype(int)
-    df.columns = year_list
-    
-    df = pd.DataFrame(stat, index=item)
-    df = df[0].str.split(expand=True).astype(int)
+    df = df[0].str.split(expand=True)
     df.columns = year_list
     
     return df
@@ -146,10 +161,10 @@ while condition == True:
     try:
         driver.find_element(
             By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[2]/table/thead/tr/th[1]/div/div[1]/button[1]').click()
-        time.sleep(0.5)
+        time.sleep(1)
         df2 = get_bsheet_data()
         df = df.join(df2.iloc[:, 0])
-        time.sleep(0.5)
+        time.sleep(1)
     except:
         print("End scraping balance sheet!")
         condition = False
@@ -178,9 +193,13 @@ def get_cashflow_data():
     
     content_stat = content_stat.replace(',', '')
     content_stat = content_stat.splitlines()
-    content_stat.remove('I. Lưu chuyển tiền từ hoạt động kinh doanh')
-    content_stat.remove('II. Lưu chuyển tiền từ hoạt động đầu tư')  
-    content_stat.remove('III. Lưu chuyển tiền từ hoạt động tài chính')  
+    try:
+        # content_stat.remove('I. Lưu chuyển tiền từ hoạt động kinh doanh')
+        content_stat.remove('II. Lưu chuyển tiền từ hoạt động đầu tư')  
+        content_stat.remove('III. Lưu chuyển tiền từ hoạt động tài chính')
+        content_stat.remove('I. LƯU CHUYỂN TIỀN TỪ HOẠT ĐỘNG KINH DOANH')
+    except:
+        pass
     
     item = []
     stat = []
@@ -192,11 +211,7 @@ def get_cashflow_data():
             stat.append(content_stat[i])
     
     df = pd.DataFrame(stat, index=item)
-    df = df[0].str.split(expand=True).astype(int)
-    df.columns = year_list
-    
-    df = pd.DataFrame(stat, index=item)
-    df = df[0].str.split(expand=True).astype(int)
+    df = df[0].str.split(expand=True)
     df.columns = year_list
     
     return df
@@ -210,13 +225,13 @@ while condition == True:
             By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[2]/table/thead/tr/th[1]/div/div[1]/button[1]').click()
         time.sleep(0.5)
         df2 = get_cashflow_data()
-        df = df.join(df2.iloc[:, 0])
+        df = df.join(df2.reset_index().iloc[:, 1])
         time.sleep(0.5)
     except:
         print("End scraping cashflow!")
         condition = False
 
-df = df.reindex(columns = df.columns.sort_values())
+# df = df.reindex(columns = df.columns.sort_values())
 
 df.T.to_csv(company_name + "_cashflow.csv")
 df.to_excel(company_name + "_cashflow.xlsx")
