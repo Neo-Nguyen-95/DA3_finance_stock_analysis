@@ -44,7 +44,7 @@ Select(
         ).select_by_visible_text('1')
 
 time.sleep(0.5)
-driver.execute_script("window.scrollBy(0, 300);")
+driver.execute_script("window.scrollBy(0, 250);")
 time.sleep(0.5)
 
 #%% GET DATA - INCOMESTATEMENT
@@ -97,7 +97,7 @@ while condition == True:
     try:
         driver.find_element(
             By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[2]/table/thead/tr/th[1]/div/div[1]/button[1]').click()
-        time.sleep(0.5)
+        time.sleep(2)
         df2 = get_income_data()
         df = df.join(df2.iloc[:, 0])
         time.sleep(0.5)
@@ -131,9 +131,9 @@ def get_bsheet_data():
     content_stat = content_stat.splitlines()
     try:
         content_stat.remove('TÀI SẢN')
-        # content_stat.remove('NGUỒN VỐN')
-        content_stat.remove('LỢI NHUẬN ĐÃ PHÂN PHỐI CHO NHÀ ĐẦU TƯ')
-        content_stat.remove('1. Lợi nhuận đã phân phối cho Nhà đầu tư trong năm')
+        content_stat.remove('NGUỒN VỐN')
+        # content_stat.remove('LỢI NHUẬN ĐÃ PHÂN PHỐI CHO NHÀ ĐẦU TƯ')
+        # content_stat.remove('1. Lợi nhuận đã phân phối cho Nhà đầu tư trong năm')
         
     except:
         pass
@@ -193,10 +193,10 @@ def get_cashflow_data():
     content_stat = content_stat.replace(',', '')
     content_stat = content_stat.splitlines()
     try:
-        # content_stat.remove('I. Lưu chuyển tiền từ hoạt động kinh doanh')
+        content_stat.remove('I. Lưu chuyển tiền từ hoạt động kinh doanh')
         content_stat.remove('II. Lưu chuyển tiền từ hoạt động đầu tư')  
         content_stat.remove('III. Lưu chuyển tiền từ hoạt động tài chính')
-        content_stat.remove('I. LƯU CHUYỂN TIỀN TỪ HOẠT ĐỘNG KINH DOANH')
+        # content_stat.remove('I. LƯU CHUYỂN TIỀN TỪ HOẠT ĐỘNG KINH DOANH')
     except:
         pass
     
