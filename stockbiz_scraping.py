@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 
 #%% URL SET-UP
 # URL information
-company_name = 'SSI'
+company_name = 'MWG'
 url = 'https://stockbiz.vn/ma-chung-khoan/' + company_name
 
 #%% LOGIN
@@ -68,7 +68,6 @@ def get_income_data():
         content_stat.remove('II. CHI PHÍ HOẠT ĐỘNG')
         content_stat.remove('III. DOANH THU HOẠT ĐỘNG TÀI CHÍNH')
         content_stat.remove('IV. CHI PHÍ TÀI CHÍNH')
-        
         content_stat.remove('VIII. THU NHẬP KHÁC VÀ CHI PHÍ KHÁC')
         content_stat.remove('XIII. THU NHẬP THUẦN TRÊN CỔ PHIẾU PHỔ THÔNG')
         content_stat.remove('13.1. Lãi cơ bản trên cổ phiếu (Đồng/1 cổ phiếu)')
@@ -112,9 +111,9 @@ df.T.to_csv(company_name + "_income.csv")
 df.to_excel(company_name + "_income.xlsx")
 
 #%% GET DATA - BALANCE SHEET
-time.sleep(0.5)
+time.sleep(.5)
 driver.find_element(By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[1]/div/button[1]').click()
-time.sleep(0.5)
+time.sleep(1)
 
 def get_bsheet_data():
     # year
@@ -164,7 +163,7 @@ while condition == True:
         time.sleep(1)
         df2 = get_bsheet_data()
         df = df.join(df2.iloc[:, 0])
-        time.sleep(1)
+        time.sleep(3)
     except:
         print("End scraping balance sheet!")
         condition = False
@@ -217,21 +216,23 @@ def get_cashflow_data():
     return df
 
 df = get_cashflow_data()
+df = df.reset_index()
 
 condition = True
 while condition == True:
     try:
         driver.find_element(
             By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[2]/table/thead/tr/th[1]/div/div[1]/button[1]').click()
-        time.sleep(0.5)
+        time.sleep(1)
         df2 = get_cashflow_data()
         df = df.join(df2.reset_index().iloc[:, 1])
-        time.sleep(0.5)
+        time.sleep(1)
     except:
         print("End scraping cashflow!")
         condition = False
 
-# df = df.reindex(columns = df.columns.sort_values())
+df = df.set_index('index')
+df = df.reindex(columns = df.columns.sort_values())
 
 df.T.to_csv(company_name + "_cashflow.csv")
 df.to_excel(company_name + "_cashflow.xlsx")
