@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 
 #%% URL SET-UP
 # URL information
-company_name = 'POW'
+company_name = 'DGW'
 url = 'https://stockbiz.vn/ma-chung-khoan/' + company_name
 
 #%% LOGIN
@@ -20,10 +20,10 @@ driver = webdriver.Chrome(service=service)
 driver.get(url)
 
 #%% SHOW DATA
-time.sleep(1)
+time.sleep(2)
 driver.execute_script("window.scrollBy(0, 3000);")
 time.sleep(1)
-driver.execute_script("window.scrollBy(0, 1500);")
+driver.execute_script("window.scrollBy(0, 1000);")  #1000-1500
 time.sleep(1)
 driver.find_element(
     By.XPATH, "//*[contains(@class, 'text-lg text-center') and text()='Tài chính']").click()
@@ -44,7 +44,7 @@ Select(
         ).select_by_visible_text('1')
 
 time.sleep(0.5)
-driver.execute_script("window.scrollBy(0, 250);")
+driver.execute_script("window.scrollBy(0, 100);")
 time.sleep(0.5)
 
 #%% GET DATA - INCOMESTATEMENT
