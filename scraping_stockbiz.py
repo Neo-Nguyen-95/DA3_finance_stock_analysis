@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 
 #%% URL SET-UP
 # URL information
-company_name = 'MWG'
+company_name = 'POW'
 url = 'https://stockbiz.vn/ma-chung-khoan/' + company_name
 
 #%% LOGIN
