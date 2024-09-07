@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from cafef_scraping import FinanceStat
+from scraping_cafef import FinanceStat
 from io import BytesIO
 
 st.title("TẢI CÁC BÁO CÁO TÀI CHÍNH CỦA MỌI CÔNG TY TỪ CAFEF.VN")
