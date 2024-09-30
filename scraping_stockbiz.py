@@ -11,7 +11,7 @@ from selenium.webdriver.support.select import Select
 
 #%% URL SET-UP
 # URL information
-company_name = 'GEX'
+company_name = 'NVL'
 url = 'https://stockbiz.vn/ma-chung-khoan/' + company_name
 
 #%% LOGIN
@@ -29,7 +29,7 @@ while condition:
             By.XPATH, "//*[contains(@class, 'text-lg text-center') and text()='Tài chính']").click()
         condition = False
     except:
-        driver.execute_script("window.scrollBy(0, 500);")
+        driver.execute_script("window.scrollBy(0, 600);")
 
 time.sleep(1)
 driver.find_element(
@@ -45,7 +45,7 @@ Select(
         driver.find_element(By.XPATH, '//*[@id="__next"]/div[3]/div/main/div/div[3]/div[2]/div/div[2]/table/thead/tr/th[1]/div/div[3]/select')
         ).select_by_visible_text('1')
 
-time.sleep(0.5)
+time.sleep(1)
 driver.execute_script("window.scrollBy(0, 100);")
 time.sleep(0.5)
 
